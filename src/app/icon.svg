@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Top Horizontal Bar Gradient -->
+    <linearGradient id="topBarGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#5835f5"/>
+      <stop offset="45%" stop-color="#6f33f7"/>
+      <stop offset="80%" stop-color="#8f43fa"/>
+      <stop offset="100%" stop-color="#ab57fb"/>
+    </linearGradient>
+
+    <!-- Diagonal Ribbon Stroke Gradient -->
+    <linearGradient id="diagonalGrad" x1="75%" y1="20%" x2="20%" y2="85%">
+      <stop offset="0%" stop-color="#6120e6"/>
+      <stop offset="40%" stop-color="#7322ea"/>
+      <stop offset="75%" stop-color="#8920e0"/>
+      <stop offset="100%" stop-color="#a81fd4"/>
+    </linearGradient>
+
+    <!-- Bottom Horizontal Bar Gradient -->
+    <linearGradient id="bottomBarGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#bd20d8"/>
+      <stop offset="25%" stop-color="#d922b9"/>
+      <stop offset="65%" stop-color="#f22595"/>
+      <stop offset="100%" stop-color="#ff2e7e"/>
+    </linearGradient>
+
+    <!-- Radiating Ray 1 (Top / Vertical) -->
+    <linearGradient id="rayGrad1" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#7b22e4"/>
+      <stop offset="100%" stop-color="#ea3399"/>
+    </linearGradient>
+
+    <!-- Radiating Ray 2 (Middle / 45-degree) -->
+    <linearGradient id="rayGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7b22e4"/>
+      <stop offset="100%" stop-color="#f02a8b"/>
+    </linearGradient>
+
+    <!-- Radiating Ray 3 (Bottom / Horizontal) -->
+    <linearGradient id="rayGrad3" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#8024e6"/>
+      <stop offset="100%" stop-color="#f72b7f"/>
+    </linearGradient>
+
+    <!-- Shadow Cast Under the Top Fold -->
+    <linearGradient id="topFoldShadow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1e054a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#1e054a" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Soft Filter for Top Bar Overlap Shadow -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="130%" height="150%">
+      <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#210652" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+
+  <g id="spark-bursts">
+    <!-- Top Ray -->
+    <rect x="354" y="92" width="30" height="58" rx="15" 
+          transform="rotate(-9 369 121)" 
+          fill="url(#rayGrad1)"/>
+
+    <!-- Middle 45° Ray -->
+    <rect x="398" y="120" width="30" height="58" rx="15" 
+          transform="rotate(40 413 149)" 
+          fill="url(#rayGrad2)"/>
+
+    <!-- Bottom Horizontal Ray -->
+    <rect x="391" y="186" width="58" height="30" rx="15" 
+          transform="rotate(2 420 201)" 
+          fill="url(#rayGrad3)"/>
+  </g>
+
+  <g id="letter-z">
+    <!-- Layer 1: Diagonal Ribbon & Back Underbelly Fold -->
+    <path d="
+      M 265 210
+      L 332 152
+      C 350 168, 360 192, 354 216
+      L 228 332
+      C 182 344, 142 360, 124 378
+      C 114 354, 124 326, 146 300
+      L 265 210
+      Z" 
+      fill="url(#diagonalGrad)"/>
+
+    <!-- Bottom Left Curve Extension (Connecting Under the Loop) -->
+    <path d="
+      M 146 300
+      C 124 326, 114 354, 124 378
+      C 118 392, 134 406, 162 406
+      L 210 406
+      C 165 406, 138 382, 146 350
+      Z" 
+      fill="#981fcb"/>
+
+    <!-- Ambient Shadow Under Top Bar -->
+    <path d="M 230 210 L 354 210 L 324 238 L 208 238 Z" 
+          fill="url(#topFoldShadow)"/>
+
+    <!-- Layer 2: Top Horizontal Bar (With Drop Shadow onto the Diagonal) -->
+    <path d="
+      M 164 138
+      L 310 138
+      C 336 138, 358 154, 358 174
+      C 358 194, 336 210, 310 210
+      L 126 210
+      C 114 210, 106 200, 110 188
+      L 144 148
+      C 148 142, 156 138, 164 138
+      Z" 
+      fill="url(#topBarGrad)" 
+      filter="url(#dropShadow)"/>
+
+    <!-- Layer 3: Bottom Horizontal Ribbon Loop (Foreground Fold) -->
+    <path d="
+      M 228 332
+      L 348 332
+      C 356 332, 364 336, 368 342
+      L 384 366
+      C 390 376, 386 388, 376 396
+      L 348 404
+      C 342 406, 336 406, 330 406
+      L 162 406
+      C 134 406, 118 392, 124 378
+      C 142 360, 182 344, 228 332
+      Z" 
+      fill="url(#bottomBarGrad)"/>
+  </g>
+</svg>

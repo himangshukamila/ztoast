@@ -1,0 +1,205 @@
+:root {
+  --bg-page: #fcfbfa;
+  --bg-subtle: #f7f4ee;
+  --bg-card: #ffffff;
+  --text-main: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #8c857b;
+  --border-subtle: #eae6df;
+  --border-strong: #d7d1c6;
+  --toast-brand: #3b82f6;
+  --toast-brown: #a2724e;
+  --toast-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --font-sans: var(--font-outfit), -apple-system, blinkmacsystemfont, "Segoe UI", roboto, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, sfmono-regular, menlo, monaco, consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-page);
+  background-image:
+    linear-gradient(to right, rgba(28, 25, 23, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 25, 23, 0.045) 1px, transparent 1px);
+  background-size: 30px 30px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container-custom {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* clean tactile button */
+.toast-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--button-shadow);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.toast-btn:hover {
+  background: #fdfdfd;
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.toast-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* primary action button */
+.toast-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #1c1917;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: 1px solid #1c1917;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.toast-btn-primary:hover {
+  background: #292524;
+  transform: translateY(-1px);
+}
+
+.toast-btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* clean white card */
+.clean-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: var(--toast-card-shadow);
+}
+
+/* code preview box */
+.code-box {
+  background: #1c1917;
+  color: #f5f5f4;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  overflow: hidden;
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-float {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex !important;
+  }
+}
+
+/* smooth toast animations */
+@keyframes ztoast-enter-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ztoast-enter-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ztoast-exit-top {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.9);
+  }
+}
+
+@keyframes ztoast-exit-bottom {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.9);
+  }
+}
+
+/* spinning icon animation */
+@keyframes ztoast-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* progress bar fill animation */
+@keyframes ztoast-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
