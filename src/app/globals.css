@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap");
+
 :root {
   --bg-page: #fcfbfa;
   --bg-subtle: #f7f4ee;
@@ -11,8 +13,8 @@
   --toast-brown: #a2724e;
   --toast-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
   --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --font-sans: var(--font-outfit), -apple-system, blinkmacsystemfont, "Segoe UI", roboto, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, sfmono-regular, menlo, monaco, consolas, monospace;
+  --font-sans: 'Outfit', -apple-system, blinkmacsystemfont, "Segoe UI", roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, sfmono-regular, menlo, monaco, consolas, monospace;
 }
 
 * {

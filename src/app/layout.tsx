@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/lib/ztoast";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ztoast.dev"
+  ),
   title: "ztoast — The Best Toast in Town",
   description:
     "Smoking hot, zero-dependency React notifications with countdown progress bars, pause on hover, promise lifecycles, and customizable styles.",
@@ -48,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en">
       <body suppressHydrationWarning>
         <Toaster defaultPosition="top-right" defaultDuration={4000}>
           {children}
