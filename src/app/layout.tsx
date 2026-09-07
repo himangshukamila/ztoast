@@ -4,7 +4,7 @@ import { Toaster } from "@/lib/ztoast";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ztoast.dev"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ztoast.onrender.com"
   ),
   title: "ztoast — The Best Toast in Town",
   description:
