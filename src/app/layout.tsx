@@ -1,28 +1,41 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "@/lib/ztoast";
+import { Toaster } from "ztoast";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://ztoast.onrender.com";
+
+const description =
+  "Zero-dependency React toasts. Mount <Toaster /> once, then call toast.success(text, icon, style) from anywhere. Place a toast at any point on screen, with smooth motion and a countdown bar that pauses on hover.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ztoast.onrender.com"
-  ),
-  title: "ztoast — The Best Toast in Town",
-  description:
-    "Smoking hot, zero-dependency React notifications with countdown progress bars, pause on hover, promise lifecycles, and customizable styles.",
+  metadataBase: new URL(siteUrl),
+  title: "ztoast — Toasts you can put anywhere",
+  description,
   keywords: [
     "react toast",
     "toast notification",
     "react toaster",
     "ztoast",
     "zero dependency toast",
+    "toast position",
     "react hot toast alternative",
   ],
   authors: [{ name: "Himangshu Kamila" }],
   openGraph: {
-    title: "ztoast — The Best Toast in Town",
-    description:
-      "Smoking hot, zero-dependency React notifications with countdown progress bars, pause on hover, and promise tracking.",
+    title: "ztoast — Toasts you can put anywhere",
+    description,
+    url: siteUrl,
+    siteName: "ztoast",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ztoast — Toasts you can put anywhere",
+    description,
+  },
+  alternates: {
+    canonical: siteUrl,
   },
   icons: {
     icon: "/fevicon.svg",
@@ -31,7 +44,7 @@ export const metadata: Metadata = {
   },
 };
 
-// root layout mounting global toaster and fonts
+// root layout, the whole setup is this single <Toaster /> mounted once
 export default function RootLayout({
   children,
 }: {
@@ -40,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <Toaster position="top-right" duration={4000} />
+        <Toaster />
         {children}
       </body>
     </html>

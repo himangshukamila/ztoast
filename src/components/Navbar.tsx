@@ -91,10 +91,10 @@ export function Navbar() {
               transition: "color 0.15s ease",
             }}
           >
-            Positions
+            Positioning
           </a>
           <a
-            href="#quickstart"
+            href="#playground"
             style={{
               color: "var(--text-secondary)",
               textDecoration: "none",
@@ -103,7 +103,7 @@ export function Navbar() {
               transition: "color 0.15s ease",
             }}
           >
-            Quickstart
+            Playground
           </a>
           <a
             href="#docs"

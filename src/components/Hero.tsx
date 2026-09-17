@@ -1,27 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { toast } from "@/lib/ztoast";
+import { Check } from "lucide-react";
+import { toast } from "ztoast";
 
-// hero section inspired by react-hot-toast with logo and quick trigger
+// hero section with the logo, the new call shape and a live trigger
 export function Hero() {
   const triggerToast = () => {
-    toast.success("Fresh toast ready to serve!", {
-      description: "Zero runtime dependencies with a built-in progress bar.",
-      progressBar: true,
-      duration: 4000,
+    toast.success("Project saved", <Check size={18} />, {
+      bgColor: "#052e16",
+      width: 360,
+      description: "Icon and styling both go into the call.",
     });
   };
 
   const checklist = [
-    "Hot by default",
-    "0 Dependencies",
-    "Accessible",
-    "Progress countdown",
-    "Pause on hover",
-    "Promise API",
-    "Style with plain CSS",
-    "Place it anywhere",
+    "One component to mount",
+    "Then call it from anywhere",
+    "Put a toast anywhere on screen",
+    "Smooth motion by default",
+    "Countdown bar, pauses on hover",
+    "No CSS file to import",
+    "Zero runtime dependencies",
+    "Works outside React too",
     "Next.js SSR safe",
   ];
 
@@ -50,7 +51,7 @@ export function Hero() {
             marginBottom: "8px",
           }}
         >
-          The Best Toast in Town.
+          Toasts you can put anywhere.
         </h1>
 
         {/* subtitle */}
@@ -59,11 +60,40 @@ export function Hero() {
             fontSize: "clamp(18px, 2.5vw, 24px)",
             fontWeight: 600,
             color: "var(--text-secondary)",
-            marginBottom: "32px",
+            marginBottom: "28px",
           }}
         >
-          Smoking hot, zero-dependency React notifications.
+          Zero-dependency React notifications.
         </p>
+
+        {/* the call shape, message then icon then style */}
+        <div
+          className="code-box"
+          style={{
+            maxWidth: "720px",
+            margin: "0 auto 24px auto",
+            padding: "16px 18px",
+            fontSize: "13.5px",
+            lineHeight: 1.7,
+            textAlign: "left",
+            overflowX: "auto",
+          }}
+        >
+          <code style={{ whiteSpace: "pre", fontFamily: "var(--font-mono)" }}>
+            <span style={{ color: "#a5b4fc" }}>toast</span>
+            <span style={{ color: "#f5f5f4" }}>.</span>
+            <span style={{ color: "#7dd3fc" }}>success</span>
+            <span style={{ color: "#f5f5f4" }}>(</span>
+            <span style={{ color: "#bef264" }}>&quot;Project saved&quot;</span>
+            <span style={{ color: "#f5f5f4" }}>, </span>
+            <span style={{ color: "#fcd34d" }}>&lt;FiCheck /&gt;</span>
+            <span style={{ color: "#f5f5f4" }}>, {"{"} bgColor: </span>
+            <span style={{ color: "#bef264" }}>&quot;#052e16&quot;</span>
+            <span style={{ color: "#f5f5f4" }}>, width: </span>
+            <span style={{ color: "#fda4af" }}>360</span>
+            <span style={{ color: "#f5f5f4" }}> {"}"});</span>
+          </code>
+        </div>
 
         {/* action buttons container */}
         <div
@@ -97,7 +127,7 @@ export function Hero() {
           >
             Documentation
           </a>
-          <span> &bull; v0.1.6</span>
+          <span> &bull; v0.1.9</span>
         </div>
 
         {/* checklist */}

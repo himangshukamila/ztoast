@@ -53,7 +53,7 @@ export function ComparisonTable() {
     },
     {
       feature: "Gzipped Bundle Size",
-      ztoast: "~3.4 KB",
+      ztoast: "~9.1 KB",
       reactHotToast: "~4.5 KB",
       sonner: "~5.8 KB",
       reactToastify: "~16.2 KB",

@@ -64,6 +64,12 @@ export function Footer() {
             >
               Docs
             </a>
+            <a
+              href="#upgrading"
+              style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "14px", fontWeight: 500 }}
+            >
+              Upgrading
+            </a>
             <button
               type="button"
               onClick={scrollToTop}

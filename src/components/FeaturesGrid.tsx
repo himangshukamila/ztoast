@@ -64,7 +64,7 @@ export function FeaturesGrid() {
       ),
       title: "Zero Runtime Dependencies",
       description:
-        "Built purely on React with zero external packages. Ships inline SVGs and standalone logic with an ultra-compact bundle footprint under 3.5KB.",
+        "Built purely on React with zero external packages. Ships inline SVGs, its own css and all the motion in one 9.1KB gzipped module.",
       badge: "0 Dependencies",
     },
     {
@@ -100,9 +100,9 @@ export function FeaturesGrid() {
           <path d="m9 12 2 2 4-4" />
         </svg>
       ),
-      title: "Styled With Plain CSS",
+      title: "Put It Anywhere",
       description:
-        "The third argument is a normal React style object. Any css property you know already works, and explicit coordinates drop the toast exactly where you want it.",
+        "Nine named spots, an edge offset like \"top-10vh\", or a free coordinate with an anchor. Toasts sharing a spot stack together, and nothing is clamped to the viewport.",
       badge: "Full Control",
     },
     {

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "@/lib/ztoast";
+import { Rocket } from "lucide-react";
+import { toast } from "ztoast";
 import { CodeSnippet } from "./CodeSnippet";
 
 interface ExampleItem {
@@ -12,7 +13,16 @@ interface ExampleItem {
   trigger: () => void;
 }
 
-// interactive examples section matching the layout from react-hot-toast
+// a plain function component, ztoast calls it with { size, color }
+function SparkIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m12 3 2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2Z" />
+    </svg>
+  );
+}
+
+// interactive examples, every snippet is exactly what the button runs
 export function Examples() {
   const [selectedId, setSelectedId] = useState<string>("success");
 
@@ -37,73 +47,182 @@ export function Examples() {
     },
     {
       id: "icon",
-      name: "Custom Icon",
+      name: "Icon",
       icon: "👏",
-      code: `// the icon is just an optional second argument
+      code: `// the icon is the optional second argument
 toast.success("Good job!", "👏");`,
       trigger: () => {
         toast.success("Good job!", "👏");
       },
     },
     {
+      id: "element-icon",
+      name: "Icon element",
+      icon: "🚀",
+      code: `import { Rocket } from "lucide-react";
+
+// icon sets built on forwardRef (lucide, heroicons) go in as elements
+toast.info("New version available", <Rocket size={18} />);`,
+      trigger: () => {
+        toast.info("New version available", <Rocket size={18} />);
+      },
+    },
+    {
+      id: "component-icon",
+      name: "Icon component",
+      icon: "✨",
+      code: `// a plain function component is called for you with { size: 18, color }
+function SparkIcon({ size, color }: { size?: number; color?: string }) {
+  return <svg width={size} height={size} stroke={color} {...} />;
+}
+
+toast.success("Rendered with the variant colour", SparkIcon);`,
+      trigger: () => {
+        toast.success("Rendered with the variant colour", SparkIcon);
+      },
+    },
+    {
+      id: "no-icon",
+      name: "No icon",
+      icon: "🫥",
+      code: `toast.show("Clean and quiet", false);`,
+      trigger: () => {
+        toast.show("Clean and quiet", false);
+      },
+    },
+    {
       id: "styled",
-      name: "Any CSS",
+      name: "Styled",
       icon: "🎨",
-      code: `// third argument is plain css, use any property you like
-toast("Hello darkness!", "🌙", {
-  background: "#18181b",
-  color: "#f4f4f5",
-  border: "1px solid #3f3f46",
-  borderRadius: 16,
-  fontFamily: "var(--font-mono)",
+      code: `toast.success("Project saved", "💾", {
+  bgColor: "#052e16",
+  textColor: "#dcfce7",
+  radius: 18,
+  width: 360,
 });`,
       trigger: () => {
-        toast("Hello darkness!", "🌙", {
-          background: "#18181b",
-          color: "#f4f4f5",
-          border: "1px solid #3f3f46",
-          borderRadius: 16,
-          fontFamily: "var(--font-mono)",
+        toast.success("Project saved", "💾", {
+          bgColor: "#052e16",
+          textColor: "#dcfce7",
+          radius: 18,
+          width: 360,
+        });
+      },
+    },
+    {
+      id: "gradient",
+      name: "Gradient",
+      icon: "🌈",
+      code: `// bgColor takes anything css background takes
+toast.show("Plan upgraded", "✨", {
+  bgColor: "linear-gradient(135deg, #1e1b4b, #4338ca)",
+  textColor: "#e0e7ff",
+  border: "1px solid #6366f1",
+  description: "Gradients, colours and url() all work.",
+});`,
+      trigger: () => {
+        toast.show("Plan upgraded", "✨", {
+          bgColor: "linear-gradient(135deg, #1e1b4b, #4338ca)",
+          textColor: "#e0e7ff",
+          border: "1px solid #6366f1",
+          description: "Gradients, colours and url() all work.",
+        });
+      },
+    },
+    {
+      id: "light",
+      name: "Light theme",
+      icon: "☀️",
+      code: `// theme is the palette for anything you do not set, default "dark"
+toast.warning("Approaching your storage limit", {
+  theme: "light",
+  duration: 6000,
+});`,
+      trigger: () => {
+        toast.warning("Approaching your storage limit", {
+          theme: "light",
+          duration: 6000,
         });
       },
     },
     {
       id: "size",
-      name: "Custom Size",
+      name: "Size & font",
       icon: "📐",
-      code: `// by default the card is only as wide as its content
-toast("Sized exactly how I want it", "📐", {
+      code: `toast.show("Sized exactly how I want it", "📐", {
   width: 380,
-  height: 90,
-  fontSize: 16,
-  background: "linear-gradient(135deg, #1e1b4b, #4338ca)",
-  color: "#e0e7ff",
+  height: 92,
+  fontSize: 15,
+  fontWeight: 700,
+  padding: "18px 20px",
 });`,
       trigger: () => {
-        toast("Sized exactly how I want it", "📐", {
+        toast.show("Sized exactly how I want it", "📐", {
           width: 380,
-          height: 90,
-          fontSize: 16,
-          background: "linear-gradient(135deg, #1e1b4b, #4338ca)",
-          color: "#e0e7ff",
+          height: 92,
+          fontSize: 15,
+          fontWeight: 700,
+          padding: "18px 20px",
         });
       },
     },
     {
-      id: "anywhere",
-      name: "Anywhere",
-      icon: "📍",
-      code: `// pass coordinates instead of an anchor name
-toast("Dropped at 260px / 80px", "📍", {
-  top: 260,
-  left: 80,
-  duration: 4000,
+      id: "progress",
+      name: "Countdown",
+      icon: "⏱",
+      code: `// progress and pauseOnHover are both on by default
+toast.success("File uploaded", {
+  duration: 6000,
+  progressColor: "#6366f1",
+  description: "Hover me, the countdown freezes.",
 });`,
       trigger: () => {
-        toast("Dropped at 260px / 80px", "📍", {
-          top: 260,
-          left: 80,
-          duration: 4000,
+        toast.success("File uploaded", {
+          duration: 6000,
+          progressColor: "#6366f1",
+          description: "Hover me, the countdown freezes.",
+        });
+      },
+    },
+    {
+      id: "no-progress",
+      name: "No countdown",
+      icon: "🚫",
+      code: `toast.show("No bar, no pause", {
+  progress: false,
+  pauseOnHover: false,
+});`,
+      trigger: () => {
+        toast.show("No bar, no pause", {
+          progress: false,
+          pauseOnHover: false,
+        });
+      },
+    },
+    {
+      id: "motion",
+      name: "Motion",
+      icon: "🎞",
+      code: `toast.show("Slow, from the left", "🎞", {
+  motion: {
+    enter: 900,
+    exit: 500,
+    slide: 40,
+    scale: 0.8,
+    blur: 6,
+    from: "left",
+  },
+});`,
+      trigger: () => {
+        toast.show("Slow, from the left", "🎞", {
+          motion: {
+            enter: 900,
+            exit: 500,
+            slide: 40,
+            scale: 0.8,
+            blur: 6,
+            from: "left",
+          },
         });
       },
     },
@@ -111,124 +230,93 @@ toast("Dropped at 260px / 80px", "📍", {
       id: "promise",
       name: "Promise",
       icon: "⏳",
-      code: `const myPromise = fetchData();
-
-toast.promise(myPromise, {
-  loading: "Loading data...",
-  success: "Data loaded successfully!",
-  error: "Error loading data",
+      code: `// returns the original promise, so you can await it
+toast.promise(uploadFile(), {
+  loading: "Uploading file...",
+  success: (data) => \`Uploaded \${data.name}\`,
+  error: (err) => \`Failed: \${(err as Error).message}\`,
 });`,
       trigger: () => {
-        const dummy = new Promise((resolve, reject) => {
-          setTimeout(() => {
-            if (Math.random() > 0.3) resolve("done");
-            else reject(new Error("Network failed"));
-          }, 1500);
-        });
+        const uploadFile = () =>
+          new Promise<{ name: string }>((resolve, reject) => {
+            setTimeout(() => {
+              if (Math.random() > 0.3) resolve({ name: "report.pdf" });
+              else reject(new Error("network down"));
+            }, 1600);
+          });
 
-        toast.promise(dummy, {
-          loading: "Loading data...",
-          success: "Data loaded successfully!",
-          error: "Error loading data",
+        toast.promise(uploadFile(), {
+          loading: "Uploading file...",
+          success: (data) => `Uploaded ${data.name}`,
+          error: (err) => `Failed: ${(err as Error).message}`,
         });
       },
     },
     {
-      id: "progress",
-      name: "Progress Bar",
-      icon: "⏱",
-      code: `toast.success("File uploaded", {
-  duration: 5000,
-  progressBar: true,
-  description: "Hover over this toast to pause countdown.",
-});`,
+      id: "inplace",
+      name: "Replace in place",
+      icon: "🔄",
+      code: `const id = "sync";
+
+toast.loading("Syncing records...", { id });
+
+// later, same id keeps the slot and restarts the countdown
+toast.success("All records up to date", { id });`,
       trigger: () => {
-        toast.success("File uploaded", {
-          duration: 5000,
-          progressBar: true,
-          description: "Hover over this toast to pause countdown.",
-        });
-      },
-    },
-    {
-      id: "multiline",
-      name: "Multi Line",
-      icon: "↕️",
-      code: `toast("This toast has multiple lines of text.", {
-  description: "You can provide a secondary description line or any custom jsx component.",
-  duration: 6000,
-});`,
-      trigger: () => {
-        toast("This toast has multiple lines of text.", {
-          description: "You can provide a secondary description line or any custom jsx component.",
-          duration: 6000,
-        });
+        const id = "sync-demo";
+        toast.loading("Syncing records...", { id });
+        setTimeout(() => {
+          toast.success("All records up to date", { id });
+        }, 1600);
       },
     },
     {
       id: "action",
-      name: "Action Button",
+      name: "Action button",
       icon: "🔩",
-      code: `toast(
-  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-    <span>Saved to archive</span>
-    <button
-      onClick={() => toast.success("Undone!")}
-      style={{
-        background: "#1c1917",
-        color: "#ffffff",
-        border: "none",
-        padding: "4px 8px",
-        borderRadius: "6px",
-        fontSize: "12px",
-        cursor: "pointer",
-      }}
-    >
-      Undo
-    </button>
-  </div>
+      code: `toast.show(
+  <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+    Saved to archive
+    <button onClick={() => toast.success("Undone!")}>Undo</button>
+  </span>,
+  { duration: 6000 }
 );`,
       trigger: () => {
-        toast(
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span>Saved to archive</span>
+        toast.show(
+          <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            Saved to archive
             <button
               type="button"
-              onClick={() => toast.success("Undone successfully!")}
+              onClick={() => toast.success("Undone!")}
               style={{
-                background: "#1c1917",
-                color: "#ffffff",
+                background: "#f5f5f4",
+                color: "#1c1917",
                 border: "none",
                 padding: "4px 8px",
-                borderRadius: "6px",
-                fontSize: "12px",
+                borderRadius: 6,
+                fontSize: 12,
                 fontWeight: 600,
                 cursor: "pointer",
               }}
             >
               Undo
             </button>
-          </div>,
-          { duration: 5000 }
+          </span>,
+          { duration: 6000 }
         );
       },
     },
     {
-      id: "inplace",
-      name: "In-Place Update",
-      icon: "🔄",
-      code: `const id = "sync-id";
+      id: "persistent",
+      name: "Persistent",
+      icon: "📌",
+      code: `const id = toast.loading("Deploying application...");
 
-toast.loading("Syncing...", { id });
-
-// later in your async flow
-toast.success("Synced successfully!", { id });`,
+// nothing counts down, dismiss it yourself
+toast.dismiss(id);`,
       trigger: () => {
-        const syncId = "inplace-sync-demo";
-        toast.loading("Syncing data...", { id: syncId });
-        setTimeout(() => {
-          toast.success("Synced successfully!", { id: syncId, duration: 3000 });
-        }, 1500);
+        const id = toast.loading("Deploying application...");
+        setTimeout(() => toast.dismiss(id), 3200);
       },
     },
   ];
