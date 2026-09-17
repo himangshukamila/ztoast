@@ -73,7 +73,7 @@ export function ComparisonTable() {
       reactToastify: false,
     },
     {
-      feature: "Strict Allowlist CSS Sanitization",
+      feature: "Free Coordinates, Not Just Anchors",
       ztoast: true,
       reactHotToast: false,
       sonner: false,

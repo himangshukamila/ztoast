@@ -1,10 +1,13 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
-// the six anchor positions a toast viewport can be placed at
+// the nine screen anchors a toast can snap to
 export type ToastPosition =
   | "top-left"
   | "top-center"
   | "top-right"
+  | "center-left"
+  | "center"
+  | "center-right"
   | "bottom-left"
   | "bottom-center"
   | "bottom-right";
@@ -17,84 +20,55 @@ export type ToastVariant =
   | "warning"
   | "loading";
 
-// custom coordinate offset options for viewports and toasts
-export interface ToastOffsetOptions {
-  top?: number | string;
-  bottom?: number | string;
-  left?: number | string;
-  right?: number | string;
-  x?: number | string;
-  y?: number | string;
+// free coordinates, pulled out of the style object and used to place the toast
+export interface ToastOffsets {
+  top?: CSSProperties["top"];
+  right?: CSSProperties["right"];
+  bottom?: CSSProperties["bottom"];
+  left?: CSSProperties["left"];
 }
 
-// visual customization options exposed to the consumer
-export interface ToastStyleOptions {
-  width?: number | string;
-  height?: number | string;
-  background?: string;
-  backgroundGradient?: string;
-  backgroundImage?: string;
-  textColor?: string;
-  fontFamily?: string;
-  fontSize?: number | string;
-  fontWeight?: number | string;
-  border?: string;
-  borderColor?: string;
-  borderWidth?: number | string;
-  borderRadius?: number | string;
-  boxShadow?: string;
-  padding?: number | string;
-  progressColor?: string;
-  top?: number | string;
-  bottom?: number | string;
-  left?: number | string;
-  right?: number | string;
-  transform?: string;
-}
-
-export interface ToastOptions extends ToastStyleOptions {
-  id?: string | number;
-  variant?: ToastVariant;
+// the only keys that are not plain css, everything else is passed straight through
+interface ToastControls {
+  id?: string;
   position?: ToastPosition;
-  offset?: ToastOffsetOptions;
   duration?: number;
+  icon?: ReactNode;
+  description?: ReactNode;
   closable?: boolean;
   progressBar?: boolean;
-  description?: ReactNode;
-  icon?: ReactNode;
+  progressColor?: string;
   onClose?: () => void;
 }
 
-export interface ToastRecord
-  extends Required<
-      Pick<ToastOptions, "id" | "variant" | "position" | "duration" | "closable">
-    >,
-    ToastStyleOptions {
+// options are css properties plus the handful of controls above
+export interface ToastOptions
+  extends Omit<CSSProperties, keyof ToastControls>,
+    ToastControls {}
+
+// internal shape stored for each live toast
+export interface ToastRecord extends ToastControls {
+  id: string;
+  variant: ToastVariant;
   message: ReactNode;
-  description?: ReactNode;
-  progressBar?: boolean;
-  offset?: ToastOffsetOptions;
-  isLeaving?: boolean;
-  icon?: ReactNode;
-  onClose?: () => void;
+  offsets: ToastOffsets;
+  style: CSSProperties;
+  leaving: boolean;
   createdAt: number;
 }
 
-export interface ToastProviderProps {
-  children: ReactNode;
-  defaultPosition?: ToastPosition;
-  defaultDuration?: number;
-  defaultProgressBar?: boolean;
+export interface ToasterProps {
+  position?: ToastPosition;
+  duration?: number;
   gap?: number;
-  offset?: ToastOffsetOptions;
-  top?: number | string;
-  bottom?: number | string;
-  left?: number | string;
-  right?: number | string;
+  offset?: number | string;
+  closable?: boolean;
+  progressBar?: boolean;
+  style?: CSSProperties;
 }
 
-export interface PromiseToastMessages<T> {
+export interface PromiseMessages<T> {
   loading: ReactNode;
   success: ReactNode | ((data: T) => ReactNode);
-  error: ReactNode | ((err: unknown) => ReactNode);
+  error: ReactNode | ((error: unknown) => ReactNode);
 }

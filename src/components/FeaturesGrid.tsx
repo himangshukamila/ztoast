@@ -100,10 +100,10 @@ export function FeaturesGrid() {
           <path d="m9 12 2 2 4-4" />
         </svg>
       ),
-      title: "Allowlist CSS Sanitizer",
+      title: "Styled With Plain CSS",
       description:
-        "Every user-provided style string passes through an allowlist sanitizer to prevent CSS injection, ReDoS attacks, and escape sequence exploits.",
-      badge: "Security First",
+        "The third argument is a normal React style object. Any css property you know already works, and explicit coordinates drop the toast exactly where you want it.",
+      badge: "Full Control",
     },
     {
       icon: (

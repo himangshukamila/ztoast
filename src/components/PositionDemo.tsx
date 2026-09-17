@@ -4,14 +4,18 @@ import { useState } from "react";
 import { toast, type ToastPosition } from "@/lib/ztoast";
 import { CodeSnippet } from "./CodeSnippet";
 
-// position switching section matching the interactive position matrix in react-hot-toast
+// position switching section showing the nine anchors plus free coordinates
 export function PositionDemo() {
   const [position, setPosition] = useState<ToastPosition>("top-center");
+  const [custom, setCustom] = useState(false);
 
   const positions: ToastPosition[] = [
     "top-left",
     "top-center",
     "top-right",
+    "center-left",
+    "center",
+    "center-right",
     "bottom-left",
     "bottom-center",
     "bottom-right",
@@ -19,16 +23,35 @@ export function PositionDemo() {
 
   const handleSelectPosition = (pos: ToastPosition) => {
     setPosition(pos);
-    toast.show(`Toast at ${pos}`, {
+    setCustom(false);
+    toast(`Toast at ${pos}`, {
       position: pos,
       duration: 3000,
       description: "Anchored to this viewport coordinate.",
     });
   };
 
-  const code = `<Toaster
-  position="${position}"
-/>`;
+  const handleCustomPosition = () => {
+    setCustom(true);
+    toast("Exactly where I asked", "📍", {
+      top: 300,
+      left: 120,
+      duration: 3000,
+      description: "top: 300, left: 120",
+    });
+  };
+
+  const code = custom
+    ? `// or forget the anchors and pass coordinates
+toast("Exactly where I asked", "📍", {
+  top: 300,
+  left: 120,
+});`
+    : `// one default for the whole app
+<Toaster position="${position}" />
+
+// or per toast
+toast("Over here", { position: "${position}" });`;
 
   return (
     <section id="positions" style={{ padding: "40px 0 60px 0" }}>
@@ -58,7 +81,7 @@ export function PositionDemo() {
             <CodeSnippet code={code} language="jsx" filename="layout.tsx" />
           </div>
 
-          {/* 3x2 grid of buttons on right */}
+          {/* 3x3 grid of anchors on right */}
           <div
             className="clean-card"
             style={{
@@ -70,25 +93,46 @@ export function PositionDemo() {
               alignContent: "center",
             }}
           >
-            {positions.map((pos) => (
-              <button
-                key={pos}
-                type="button"
-                onClick={() => handleSelectPosition(pos)}
-                className="toast-btn"
-                style={{
-                  fontSize: "12px",
-                  padding: "12px 6px",
-                  background: position === pos ? "#1c1917" : "#ffffff",
-                  color: position === pos ? "#ffffff" : "var(--text-main)",
-                  borderColor: position === pos ? "#1c1917" : "var(--border-subtle)",
-                  fontWeight: position === pos ? 700 : 500,
-                  boxShadow: position === pos ? "0 2px 6px rgba(0,0,0,0.15)" : "var(--button-shadow)",
-                }}
-              >
-                {pos}
-              </button>
-            ))}
+            {positions.map((pos) => {
+              const active = !custom && position === pos;
+              return (
+                <button
+                  key={pos}
+                  type="button"
+                  onClick={() => handleSelectPosition(pos)}
+                  className="toast-btn"
+                  style={{
+                    fontSize: "12px",
+                    padding: "12px 6px",
+                    background: active ? "#1c1917" : "#ffffff",
+                    color: active ? "#ffffff" : "var(--text-main)",
+                    borderColor: active ? "#1c1917" : "var(--border-subtle)",
+                    fontWeight: active ? 700 : 500,
+                    boxShadow: active ? "0 2px 6px rgba(0,0,0,0.15)" : "var(--button-shadow)",
+                  }}
+                >
+                  {pos}
+                </button>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={handleCustomPosition}
+              className="toast-btn"
+              style={{
+                gridColumn: "span 3",
+                fontSize: "12px",
+                padding: "12px 6px",
+                background: custom ? "#1c1917" : "#ffffff",
+                color: custom ? "#ffffff" : "var(--text-main)",
+                borderColor: custom ? "#1c1917" : "var(--border-subtle)",
+                fontWeight: custom ? 700 : 500,
+                boxShadow: custom ? "0 2px 6px rgba(0,0,0,0.15)" : "var(--button-shadow)",
+              }}
+            >
+              📍 custom coordinates
+            </button>
           </div>
         </div>
       </div>

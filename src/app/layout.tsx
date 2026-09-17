@@ -40,9 +40,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <Toaster defaultPosition="top-right" defaultDuration={4000}>
-          {children}
-        </Toaster>
+        <Toaster position="top-right" duration={4000} />
+        {children}
       </body>
     </html>
   );

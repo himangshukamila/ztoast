@@ -1,17 +1,10 @@
-export { ToastProvider } from "./ToastProvider";
-export type { ToastContextValue } from "./ToastProvider";
-export { ToastViewport } from "./ToastViewport";
+export { toast } from "./store";
+export type { ToastFn } from "./store";
 export { Toaster } from "./Toaster";
-export type { ToasterProps } from "./Toaster";
-export { useToast } from "./useToast";
-export { toast } from "./toastStore";
 export type {
+  PromiseMessages,
+  ToasterProps,
   ToastOptions,
   ToastPosition,
   ToastVariant,
-  ToastStyleOptions,
-  ToastOffsetOptions,
-  ToastProviderProps,
-  ToastRecord,
-  PromiseToastMessages,
 } from "./types";

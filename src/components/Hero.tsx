@@ -20,8 +20,8 @@ export function Hero() {
     "Progress countdown",
     "Pause on hover",
     "Promise API",
-    "CSS Sanitizer",
-    "Under 3.5kb",
+    "Style with plain CSS",
+    "Place it anywhere",
     "Next.js SSR safe",
   ];
 

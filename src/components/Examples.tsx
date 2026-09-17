@@ -36,6 +36,78 @@ export function Examples() {
       },
     },
     {
+      id: "icon",
+      name: "Custom Icon",
+      icon: "👏",
+      code: `// the icon is just an optional second argument
+toast.success("Good job!", "👏");`,
+      trigger: () => {
+        toast.success("Good job!", "👏");
+      },
+    },
+    {
+      id: "styled",
+      name: "Any CSS",
+      icon: "🎨",
+      code: `// third argument is plain css, use any property you like
+toast("Hello darkness!", "🌙", {
+  background: "#18181b",
+  color: "#f4f4f5",
+  border: "1px solid #3f3f46",
+  borderRadius: 16,
+  fontFamily: "var(--font-mono)",
+});`,
+      trigger: () => {
+        toast("Hello darkness!", "🌙", {
+          background: "#18181b",
+          color: "#f4f4f5",
+          border: "1px solid #3f3f46",
+          borderRadius: 16,
+          fontFamily: "var(--font-mono)",
+        });
+      },
+    },
+    {
+      id: "size",
+      name: "Custom Size",
+      icon: "📐",
+      code: `// by default the card is only as wide as its content
+toast("Sized exactly how I want it", "📐", {
+  width: 380,
+  height: 90,
+  fontSize: 16,
+  background: "linear-gradient(135deg, #1e1b4b, #4338ca)",
+  color: "#e0e7ff",
+});`,
+      trigger: () => {
+        toast("Sized exactly how I want it", "📐", {
+          width: 380,
+          height: 90,
+          fontSize: 16,
+          background: "linear-gradient(135deg, #1e1b4b, #4338ca)",
+          color: "#e0e7ff",
+        });
+      },
+    },
+    {
+      id: "anywhere",
+      name: "Anywhere",
+      icon: "📍",
+      code: `// pass coordinates instead of an anchor name
+toast("Dropped at 260px / 80px", "📍", {
+  top: 260,
+  left: 80,
+  duration: 4000,
+});`,
+      trigger: () => {
+        toast("Dropped at 260px / 80px", "📍", {
+          top: 260,
+          left: 80,
+          duration: 4000,
+        });
+      },
+    },
+    {
       id: "promise",
       name: "Promise",
       icon: "⏳",
@@ -82,69 +154,14 @@ toast.promise(myPromise, {
       id: "multiline",
       name: "Multi Line",
       icon: "↕️",
-      code: `toast.show(
-  "This toast has multiple lines of text.",
-  {
-    description: "You can provide a secondary description line or any custom jsx component.",
-    duration: 6000,
-  }
-);`,
+      code: `toast("This toast has multiple lines of text.", {
+  description: "You can provide a secondary description line or any custom jsx component.",
+  duration: 6000,
+});`,
       trigger: () => {
-        toast.show("This toast has multiple lines of text.", {
+        toast("This toast has multiple lines of text.", {
           description: "You can provide a secondary description line or any custom jsx component.",
           duration: 6000,
-        });
-      },
-    },
-    {
-      id: "icon",
-      name: "Custom Icon",
-      icon: "👏",
-      code: `toast.show("Good job!", {
-  icon: "👏",
-});`,
-      trigger: () => {
-        toast.show("Good job!", {
-          icon: <span style={{ fontSize: "18px" }}>👏</span>,
-        });
-      },
-    },
-    {
-      id: "dark",
-      name: "Dark Popover",
-      icon: "🌚",
-      code: `toast.show("Hello darkness!", {
-  background: "#18181b",
-  textColor: "#f4f4f5",
-  borderColor: "#27272a",
-});`,
-      trigger: () => {
-        toast.show("Hello darkness!", {
-          background: "#18181b",
-          textColor: "#f4f4f5",
-          borderColor: "#27272a",
-        });
-      },
-    },
-    {
-      id: "themed",
-      name: "Themed Gradient",
-      icon: "🎨",
-      code: `toast.show("Custom announcement", {
-  backgroundGradient: "linear-gradient(135deg, #1e1b4b, #312e81)",
-  borderColor: "#6366f1",
-  textColor: "#e0e7ff",
-  progressColor: "#818cf8",
-  progressBar: true,
-});`,
-      trigger: () => {
-        toast.show("Custom announcement", {
-          backgroundGradient: "linear-gradient(135deg, #1e1b4b, #312e81)",
-          borderColor: "#6366f1",
-          textColor: "#e0e7ff",
-          progressColor: "#818cf8",
-          progressBar: true,
-          duration: 5000,
         });
       },
     },
@@ -152,8 +169,8 @@ toast.promise(myPromise, {
       id: "action",
       name: "Action Button",
       icon: "🔩",
-      code: `toast.show(
-  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
+      code: `toast(
+  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
     <span>Saved to archive</span>
     <button
       onClick={() => toast.success("Undone!")}
@@ -172,8 +189,8 @@ toast.promise(myPromise, {
   </div>
 );`,
       trigger: () => {
-        toast.show(
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
+        toast(
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span>Saved to archive</span>
             <button
               type="button"
@@ -267,7 +284,7 @@ toast.success("Synced successfully!", { id });`,
                   padding: "10px 14px",
                   fontSize: "13px",
                   borderColor: selectedId === item.id ? "#1c1917" : "var(--border-subtle)",
-                  backgroundColor: selectedId === item.id ? "#ffffff" : "#ffffff",
+                  backgroundColor: "#ffffff",
                   boxShadow: selectedId === item.id ? "0 2px 6px rgba(0,0,0,0.08)" : "var(--button-shadow)",
                   fontWeight: selectedId === item.id ? 700 : 600,
                 }}

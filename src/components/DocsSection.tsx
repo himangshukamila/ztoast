@@ -9,34 +9,41 @@ export function DocsSection() {
 
   const apiMethods = [
     {
-      name: "toast(message, options?)",
-      returns: "string | number",
+      name: "toast(message, icon?, style?)",
+      returns: "string",
       badge: "core",
-      desc: "Creates a standard notification card with a clean white appearance and automatic unique id assignment.",
+      desc: "Every method takes the same three arguments: the message, an optional icon, and an optional object holding plain css plus a few controls. The icon and the style object can both be skipped.",
       code: `import { toast } from "ztoast";
 
-// basic message
+// just a message
 toast("Your changes have been saved.");
 
-// with secondary description and countdown bar
-toast("Backup completed", {
-  description: "Stored securely in cloud storage.",
-  progressBar: true,
+// message + icon
+toast("Backup completed", "💾");
+
+// message + icon + css
+toast("Backup completed", "💾", {
+  background: "#18181b",
+  color: "#fafafa",
+  borderRadius: 16,
   duration: 4000,
-});`,
+});
+
+// the icon is optional, skip straight to the css
+toast("Backup completed", { width: 320 });`,
     },
     {
-      name: "toast.success(message, options?)",
-      returns: "string | number",
+      name: "toast.success(message, icon?, style?)",
+      returns: "string",
       badge: "variant",
-      desc: "Displays a positive success notification accompanied by an emerald checkmark badge.",
-      code: `toast.success("Profile updated successfully", {
-  duration: 3500,
-});`,
+      desc: "Displays a positive success notification accompanied by an emerald checkmark badge, unless you pass your own icon.",
+      code: `toast.success("Profile updated successfully");
+
+toast.success("Profile updated", "🎉", { duration: 3500 });`,
     },
     {
-      name: "toast.error(message, options?)",
-      returns: "string | number",
+      name: "toast.error(message, icon?, style?)",
+      returns: "string",
       badge: "variant",
       desc: "Displays an assertive error alert with a coral red badge and accessible alert aria role.",
       code: `toast.error("Could not connect to database", {
@@ -44,17 +51,17 @@ toast("Backup completed", {
 });`,
     },
     {
-      name: "toast.loading(message, options?)",
-      returns: "string | number",
+      name: "toast.loading(message, icon?, style?)",
+      returns: "string",
       badge: "variant",
-      desc: "Displays an ongoing action with a spinning loader icon that remains on screen until resolved or dismissed.",
+      desc: "Displays an ongoing action with a spinning loader icon. It stays on screen until you dismiss or replace it.",
       code: `const toastId = toast.loading("Deploying application...");
 
 // dismiss later when task completes
 toast.dismiss(toastId);`,
     },
     {
-      name: "toast.promise(promise, messages, options?)",
+      name: "toast.promise(promise, messages, style?)",
       returns: "Promise<T>",
       badge: "async",
       desc: "Seamlessly tracks any javascript promise from pending state to resolution or rejection.",
@@ -81,103 +88,115 @@ toast.dismiss();`,
 
   const toastOptions = [
     {
-      option: "duration",
-      type: "number",
-      def: "4000",
-      desc: "Time in milliseconds before the toast dismisses automatically. Set to Infinity to keep the notification persistent until manually closed.",
+      option: "any css property",
+      type: "CSSProperties",
+      def: "—",
+      desc: "Everything React accepts in a style object works here: background, color, width, height, fontFamily, fontSize, padding, border, borderRadius, boxShadow, backdropFilter and so on. It is applied inline, so it always wins over the default card look.",
     },
     {
-      option: "description",
-      type: "ReactNode",
+      option: "top / right / bottom / left",
+      type: "number | string",
       def: "undefined",
-      desc: "Secondary descriptive text or custom JSX rendered beneath the headline message for additional context.",
-    },
-    {
-      option: "progressBar",
-      type: "boolean",
-      def: "false",
-      desc: "Renders an animated countdown progress bar at the bottom edge. Automatically pauses when the user hovers over the card.",
+      desc: "Drop the toast at exact coordinates instead of an anchor. Any side you pass overrides that half of the anchor, so { top: 300, left: 120 } places it there and { bottom: 40 } only changes the vertical edge.",
     },
     {
       option: "position",
       type: "ToastPosition",
       def: '"top-right"',
-      desc: "Overrides the global anchor position for this specific toast ('top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right').",
+      desc: "One of the nine anchors: top-left, top-center, top-right, center-left, center, center-right, bottom-left, bottom-center, bottom-right.",
+    },
+    {
+      option: "duration",
+      type: "number",
+      def: "4000",
+      desc: "Time in milliseconds before the toast dismisses automatically. Set to Infinity to keep the notification until it is closed.",
     },
     {
       option: "icon",
       type: "ReactNode",
       def: "variant icon",
-      desc: "Custom JSX element or emoji icon to replace the default circular status badge.",
+      desc: "Same as the optional second argument, an emoji or any JSX element replacing the default status badge. Handy when you skip the positional form.",
     },
     {
-      option: "id",
-      type: "string | number",
-      def: "auto generated",
-      desc: "Custom identifier string. Reusing an existing id allows you to smoothly update a notification in place without creating a duplicate.",
-    },
-    {
-      option: "closable",
-      type: "boolean",
-      def: "true",
-      desc: "Whether to render the subtle close button on the top right of the notification card.",
-    },
-    {
-      option: "onClose",
-      type: "() => void",
+      option: "description",
+      type: "ReactNode",
       def: "undefined",
-      desc: "Lifecycle callback function invoked when the notification begins its exit animation.",
+      desc: "Secondary text or custom JSX rendered beneath the headline message.",
+    },
+    {
+      option: "progressBar",
+      type: "boolean",
+      def: "false",
+      desc: "Renders an animated countdown bar at the bottom edge. It pauses while the pointer is over the card.",
     },
     {
       option: "progressColor",
       type: "string",
       def: "accent color",
-      desc: "Custom color for the animated countdown bar. Accepts hex, rgb, hsl, or css variable tokens.",
+      desc: "Color of the countdown bar. Any css color value.",
     },
     {
-      option: "background",
-      type: "string",
-      def: '"#ffffff"',
-      desc: "Custom background color override for the toast container card.",
+      option: "closable",
+      type: "boolean",
+      def: "true",
+      desc: "Whether to render the close button on the card.",
     },
     {
-      option: "textColor",
+      option: "id",
       type: "string",
-      def: '"#1c1917"',
-      desc: "Custom text color override for the title and content.",
+      def: "auto generated",
+      desc: "Reusing an id replaces that toast in place instead of stacking a duplicate.",
+    },
+    {
+      option: "onClose",
+      type: "() => void",
+      def: "undefined",
+      desc: "Called when the notification starts its exit animation.",
     },
   ];
 
   const toasterProps = [
     {
-      prop: "defaultPosition",
+      prop: "position",
       type: "ToastPosition",
       def: '"top-right"',
-      desc: "Default screen anchor coordinate for all notifications. Supports 6 positions across top and bottom screen edges.",
+      desc: "Default anchor for every toast, overridable per toast. Nine anchors are available across the top, middle and bottom of the screen.",
     },
     {
-      prop: "defaultDuration",
+      prop: "duration",
       type: "number",
       def: "4000",
       desc: "Default time in milliseconds before notifications dismiss automatically.",
     },
     {
-      prop: "defaultProgressBar",
-      type: "boolean",
-      def: "false",
-      desc: "When enabled, every toast renders an animated countdown bar that pauses on mouse hover.",
-    },
-    {
       prop: "gap",
       type: "number",
       def: "12",
-      desc: "Vertical pixel spacing between stacked notification cards in the viewport.",
+      desc: "Vertical pixel spacing between stacked notification cards.",
     },
     {
-      prop: "top / bottom / left / right",
+      prop: "offset",
       type: "number | string",
-      def: "16px",
-      desc: "Pixel or CSS dimension distance from screen edges to the viewport container.",
+      def: "16",
+      desc: "Distance between the anchored stack and the edge of the screen.",
+    },
+    {
+      prop: "closable",
+      type: "boolean",
+      def: "true",
+      desc: "Default for the close button, overridable per toast.",
+    },
+    {
+      prop: "progressBar",
+      type: "boolean",
+      def: "false",
+      desc: "Turns the countdown bar on for every toast, overridable per toast.",
+    },
+    {
+      prop: "style",
+      type: "CSSProperties",
+      def: "undefined",
+      desc: "Base css merged into every toast, so you can theme the whole app once. Per toast styles still win over it.",
     },
   ];
 
@@ -338,7 +357,7 @@ toast.dismiss();`,
                 Mounting the Toaster Viewport
               </h3>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "16px", lineHeight: 1.5 }}>
-                Mount the Toaster component once in your root layout. It renders an accessible viewport portal attached directly to the document body and listens to all toast events.
+                Mount the Toaster component once in your root layout. It renders an accessible portal attached directly to the document body, ships its own css, and listens to every toast call in your app.
               </p>
               <CodeSnippet
                 code={`import { Toaster } from "ztoast";
@@ -347,12 +366,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <Toaster
-          defaultPosition="top-right"
-          defaultDuration={4000}
-          defaultProgressBar={false}
-          gap={12}
-        />
+        <Toaster position="top-right" duration={4000} />
         {children}
       </body>
     </html>

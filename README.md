@@ -2,20 +2,16 @@
 
 Smoking hot, zero-dependency React notifications.
 
-`ztoast` is a lightweight, accessible, and highly customizable toast notification engine for React and Next.js. Weighing under 3.5kb gzipped, it delivers silky-smooth spring transitions, countdown progress bars, hardware-accelerated pause on hover, and full promise tracking with zero external dependencies.
+One call, three arguments, no configuration:
 
----
+```tsx
+toast.success("Payment received", "💸", { background: "#101014", color: "#fff" });
+//            └ message          └ icon  └ plain css + a few options
+//                                 (optional)   (optional)
+```
 
-## Features
-
-- **Zero dependencies**: Built from scratch with vanilla React, zero third-party packages required.
-- **Hot by default**: Clean, tactile card design with accessible ARIA roles (`status` and `alert`).
-- **Smooth spring transitions**: Position-aware entrance and exit animations with natural physics.
-- **Countdown progress bar**: Animated duration countdown that pauses automatically when the user hovers over the notification card.
-- **Promise lifecycle tracking**: Automatically guides an asynchronous task from loading to success or failure.
-- **Position matrix**: Supports 6 viewport coordinates (`top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`).
-- **In-place updates**: Pass an `id` to update any existing notification in place without jarring layout jumps.
-- **Next.js & SSR safe**: Hydration-safe portal mounting compatible with React 19 and Next.js App Router.
+The toast is only as wide as its content until you say otherwise, and it can sit
+on any of nine anchors or at exact coordinates you pass yourself.
 
 ---
 
@@ -25,41 +21,20 @@ Smoking hot, zero-dependency React notifications.
 npm i ztoast
 ```
 
-Alternatively with other package managers:
-
-```bash
-pnpm add ztoast
-# or
-yarn add ztoast
-# or
-bun add ztoast
-```
-
----
-
 ## Quickstart
 
-### 1. Add the Toaster to your root layout
-
-Mount the `<Toaster />` component once at the top level of your application (for example, in your `app/layout.tsx` for Next.js App Router):
+Mount `<Toaster />` once, anywhere in your tree. It brings its own CSS, so there
+is nothing to import and no provider to wrap around your app.
 
 ```tsx
+// app/layout.tsx
 import { Toaster } from "ztoast";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Toaster
-          defaultPosition="top-right"
-          defaultDuration={4000}
-          defaultProgressBar={false}
-          gap={12}
-        />
+        <Toaster position="top-right" duration={4000} />
         {children}
       </body>
     </html>
@@ -67,163 +42,181 @@ export default function RootLayout({
 }
 ```
 
-### 2. Start toasting anywhere in your code
-
-Trigger notifications from any client component or event handler:
+Then call `toast` from anywhere, including files that are not React components:
 
 ```tsx
-"use client";
-
 import { toast } from "ztoast";
 
-export function ActionButtons() {
-  return (
-    <div style={{ display: "flex", gap: "10px" }}>
-      {/* default toast */}
-      <button onClick={() => toast("Your draft has been saved.")}>
-        Save Draft
-      </button>
-
-      {/* success toast with countdown bar */}
-      <button
-        onClick={() =>
-          toast.success("Payment received!", {
-            description: "Receipt sent to your email address.",
-            progressBar: true,
-            duration: 5000,
-          })
-        }
-      >
-        Pay Now
-      </button>
-
-      {/* error toast */}
-      <button
-        onClick={() =>
-          toast.error("Unable to connect to server.", {
-            description: "Please check your network settings.",
-          })
-        }
-      >
-        Simulate Error
-      </button>
-    </div>
-  );
-}
+toast("Saved");
+toast.success("Payment received");
+toast.error("Could not reach the server");
 ```
 
 ---
 
-## API Reference
+## The three arguments
 
-### `toast` Methods
+Every method has the same shape: `toast.x(message, icon?, style?)`. The icon and
+the style object are both optional, and you can skip the icon and pass the style
+object second.
 
-| Method | Returns | Description |
-| :--- | :--- | :--- |
-| `toast(message, options?)` | `string \| number` | Fires a standard notification card with automatic id assignment. |
-| `toast.success(message, options?)` | `string \| number` | Fires a success notification with an emerald checkmark badge. |
-| `toast.error(message, options?)` | `string \| number` | Fires an assertive error notification with a coral red badge. |
-| `toast.loading(message, options?)` | `string \| number` | Fires a persistent notification with a spinning loader arc. |
-| `toast.promise(promise, messages, options?)` | `Promise<T>` | Tracks a promise through pending, resolved, and rejected states. |
-| `toast.dismiss(id?)` | `void` | Dismisses a specific notification with an exit animation, or all active notifications if no id is passed. |
+```tsx
+toast("Deploy finished");                       // message only
+toast("Deploy finished", "🚀");                 // message + icon
+toast("Deploy finished", "🚀", { width: 340 }); // message + icon + css
+toast("Deploy finished", { width: 340 });       // message + css, no icon
+```
+
+The icon can be an emoji, a string, or any JSX. Pass `null` to drop the default
+badge entirely:
+
+```tsx
+import { Rocket } from "lucide-react";
+
+toast("Deploy finished", <Rocket size={18} color="#6366f1" />);
+toast.success("No badge, just text", null);
+```
 
 ---
 
-### `ToastOptions`
+## Styling is just CSS
 
-Pass an optional options object as the second argument to any `toast` method:
+The third argument is a React style object. Every css property you already know
+works, and it is applied inline, so it always beats the default card look.
+
+```tsx
+toast.success("Plan upgraded", "✨", {
+  background: "linear-gradient(135deg, #1e1b4b, #4338ca)",
+  color: "#e0e7ff",
+  fontFamily: "ui-monospace, monospace",
+  fontSize: 15,
+  width: 360,
+  height: 84,
+  borderRadius: 18,
+  border: "1px solid #6366f1",
+  boxShadow: "0 18px 40px -12px rgba(67, 56, 202, 0.6)",
+});
+```
+
+Sizing rules:
+
+- **No width given** → the card hugs its text, up to `min(92vw, 420px)`.
+- **`width` / `height` given** → exactly that size.
+
+To theme every toast at once, pass `style` to the `Toaster`. Per-toast styles
+still win over it.
+
+```tsx
+<Toaster style={{ background: "#18181b", color: "#fafafa", borderRadius: 14 }} />
+```
+
+---
+
+## Put it anywhere
+
+Nine anchors are available:
+
+```
+top-left      top-center      top-right
+center-left   center          center-right
+bottom-left   bottom-center   bottom-right
+```
+
+```tsx
+<Toaster position="bottom-center" />      // default for the whole app
+toast("Over here", { position: "center" }); // just this toast
+```
+
+Not enough? Pass coordinates instead. Any side you give (`top`, `right`,
+`bottom`, `left`) replaces that half of the anchor, and toasts landing on the
+same spot stack together.
+
+```tsx
+toast("Right here", "📍", { top: 300, left: 120 });
+toast("Above the tab bar", { bottom: 96 });
+toast("Dead center, huge", { top: "50%", left: "50%", width: 420 });
+```
+
+---
+
+## Options
+
+Anything that is not a css property is one of these:
 
 | Option | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `duration` | `number` | `4000` | Duration in milliseconds before automatic dismissal. Set to `Infinity` to keep persistent. |
-| `description` | `ReactNode` | `undefined` | Secondary text or custom JSX rendered beneath the headline message. |
-| `progressBar` | `boolean` | `false` | Renders a countdown bar at the bottom edge that pauses on hover. |
-| `position` | `ToastPosition` | `defaultPosition` | Overrides the anchor coordinate (`top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`). |
-| `icon` | `ReactNode` | `variant icon` | Custom JSX element or emoji replacing the default status badge. |
-| `id` | `string \| number` | `auto-generated` | Custom identifier. Reusing an existing id updates the notification in place. |
-| `closable` | `boolean` | `true` | Renders a subtle close button on the top right of the card. |
-| `onClose` | `() => void` | `undefined` | Callback invoked as soon as the toast begins its exit transition. |
-| `progressColor` | `string` | `accent color` | Custom fill color for the countdown progress bar. |
-| `background` | `string` | `"#ffffff"` | Custom background color for the toast card container. |
-| `textColor` | `string` | `"#1c1917"` | Custom text color for the title and description content. |
+| `position` | `ToastPosition` | `"top-right"` | One of the nine anchors. |
+| `top` / `right` / `bottom` / `left` | `number \| string` | — | Exact coordinates, they override the matching half of the anchor. |
+| `duration` | `number` | `4000` | Milliseconds before auto dismiss. `Infinity` keeps it on screen. |
+| `icon` | `ReactNode` | variant icon | Same as the second argument. |
+| `description` | `ReactNode` | — | Secondary line under the message. |
+| `progressBar` | `boolean` | `false` | Countdown bar that pauses on hover. |
+| `progressColor` | `string` | accent | Color of that bar. |
+| `closable` | `boolean` | `true` | Show the close button. |
+| `id` | `string` | auto | Reusing an id replaces that toast in place. |
+| `onClose` | `() => void` | — | Fires when the toast starts leaving. |
+
+Everything else in the object is treated as css.
 
 ---
 
-### `<Toaster />` Props
+## Methods
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `defaultPosition` | `ToastPosition` | `"top-right"` | Global anchor coordinate across the 6 screen positions. |
-| `defaultDuration` | `number` | `4000` | Global auto-dismiss duration in milliseconds. |
-| `defaultProgressBar` | `boolean` | `false` | When enabled, every toast displays a countdown progress bar. |
-| `gap` | `number` | `12` | Vertical spacing in pixels between stacked notifications. |
-| `top` / `bottom` / `left` / `right` | `number \| string` | `16` | Pixel distance or CSS dimension from viewport boundaries. |
+| Method | Returns | Description |
+| :--- | :--- | :--- |
+| `toast(message, icon?, style?)` | `string` | Plain notification. |
+| `toast.success(...)` | `string` | Green check badge. |
+| `toast.error(...)` | `string` | Red badge, `role="alert"`. |
+| `toast.info(...)` | `string` | Blue badge. |
+| `toast.warning(...)` | `string` | Amber badge. |
+| `toast.loading(...)` | `string` | Spinner, stays until replaced or dismissed. |
+| `toast.promise(promise, messages, style?)` | `Promise<T>` | Loading → success / error in one card. |
+| `toast.dismiss(id?)` | `void` | Dismiss one toast, or all of them. |
+| `toast.dismissAll()` | `void` | Dismiss everything. |
 
----
-
-## Asynchronous Promise Tracking
-
-`toast.promise` provides an intuitive way to track asynchronous workflows:
+### Promises
 
 ```tsx
-import { toast } from "ztoast";
-
-const updateUserData = async () => {
-  const res = await fetch("/api/user", { method: "PUT" });
-  if (!res.ok) throw new Error("Could not update user");
-  return res.json();
-};
-
-// tracks pending state, resolved state, and rejected state
-toast.promise(updateUserData(), {
-  loading: "Saving updates to database...",
-  success: (data) => `Profile for ${data.name} saved!`,
+toast.promise(saveSettings(), {
+  loading: "Saving your preferences...",
+  success: (data) => `Saved at ${data.timestamp}`,
   error: (err) => `Failed: ${err.message}`,
 });
 ```
 
----
-
-## Updating Notifications In-Place
-
-You can supply a custom `id` to replace an active notification without creating duplicates:
+### Updating a toast in place
 
 ```tsx
-import { toast } from "ztoast";
+const id = "sync";
 
-const syncId = "data-sync-task";
-
-// step 1: show initial loading alert
-toast.loading("Synchronizing records...", { id: syncId });
-
-try {
-  await syncRecords();
-  // step 2: replace in place with success alert
-  toast.success("All records up to date!", { id: syncId, duration: 4000 });
-} catch (err) {
-  // step 3: or replace in place with error alert
-  toast.error("Sync failed. Check network.", { id: syncId });
-}
+toast.loading("Syncing records...", { id });
+await syncRecords();
+toast.success("All records up to date", { id });
 ```
+
+---
+
+## `<Toaster />` props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `position` | `ToastPosition` | `"top-right"` | Default anchor. |
+| `duration` | `number` | `4000` | Default auto dismiss time. |
+| `gap` | `number` | `12` | Space between stacked cards. |
+| `offset` | `number \| string` | `16` | Distance from the screen edge. |
+| `closable` | `boolean` | `true` | Default close button. |
+| `progressBar` | `boolean` | `false` | Default countdown bar. |
+| `style` | `CSSProperties` | — | Base css merged into every toast. |
 
 ---
 
 ## Development
 
-Run the showcase and documentation site locally:
-
 ```bash
-# install dependencies
 npm install
-
-# run development server
 npm run dev
-
-# build optimized production bundle
 npm run build
 ```
-
----
 
 ## License
 
